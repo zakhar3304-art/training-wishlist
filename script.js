@@ -21,6 +21,34 @@ function sendResponseByEmail(subject, lines) {
   window.location.href = mailtoUrl;
 }
 
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+}
+
+async function copyResponseText(subject, lines) {
+  const text = `Тема: ${subject}\n\n${lines.filter(Boolean).join("\n")}`;
+  const ok = await copyToClipboard(text);
+  showToast(ok ? "Скопировано! Вставьте текст в письмо или чат 📋" : "Не удалось скопировать 😕");
+}
+
 function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
@@ -70,13 +98,9 @@ function updatePickCount() {
   document.getElementById("pickCount").textContent = `Выбрано тренингов: ${selectedTrainings.size}`;
 }
 
-document.getElementById("submitTrainings").addEventListener("click", () => {
-  if (selectedTrainings.size === 0) {
-    showToast("Выберите хотя бы один тренинг 🙂");
-    return;
-  }
+function getTrainingsResponse() {
   const anon = document.getElementById("tAnon").checked;
-  const response = {
+  return {
     id: Date.now(),
     type: "trainings",
     date: new Date().toISOString(),
@@ -85,15 +109,18 @@ document.getElementById("submitTrainings").addEventListener("click", () => {
     department: document.getElementById("tDept").value,
     trainings: Array.from(selectedTrainings).map(id => TRAININGS.find(t => t.id === id).title)
   };
-  saveResponse(response);
+}
 
-  sendResponseByEmail("Заявка на тренинг(и)", [
+function trainingsResponseLines(response) {
+  return [
     `Тренинги: ${response.trainings.join(", ")}`,
     `Отдел: ${response.department || "не указан"}`,
     `Имя: ${response.anonymous ? "анонимно" : response.name || "не указано"}`,
     `Дата: ${new Date(response.date).toLocaleString("ru-RU")}`
-  ]);
+  ];
+}
 
+function resetTrainingsForm() {
   selectedTrainings.forEach(id => {
     document.getElementById(`card-${id}`)?.querySelector(".pick-btn")?.classList.remove("picked");
     document.getElementById(`card-${id}`)?.classList.remove("selected");
@@ -104,8 +131,29 @@ document.getElementById("submitTrainings").addEventListener("click", () => {
   document.getElementById("tName").value = "";
   document.getElementById("tDept").value = "";
   document.getElementById("tAnon").checked = false;
+}
 
+document.getElementById("submitTrainings").addEventListener("click", () => {
+  if (selectedTrainings.size === 0) {
+    showToast("Выберите хотя бы один тренинг 🙂");
+    return;
+  }
+  const response = getTrainingsResponse();
+  saveResponse(response);
+  sendResponseByEmail("Заявка на тренинг(и)", trainingsResponseLines(response));
+  resetTrainingsForm();
   showToast("Открываем почту — нажмите «Отправить» в письме 📧");
+});
+
+document.getElementById("copyTrainings").addEventListener("click", async () => {
+  if (selectedTrainings.size === 0) {
+    showToast("Выберите хотя бы один тренинг 🙂");
+    return;
+  }
+  const response = getTrainingsResponse();
+  saveResponse(response);
+  await copyResponseText("Заявка на тренинг(и)", trainingsResponseLines(response));
+  resetTrainingsForm();
 });
 
 renderTrainings();
@@ -140,7 +188,7 @@ function showStep(index) {
 
 nextBtn.addEventListener("click", () => {
   if (steps[currentStep] === "6") {
-    submitSurvey();
+    submitSurveyByEmail();
   }
 
   if (currentStep < steps.length - 1) {
@@ -156,10 +204,9 @@ prevBtn.addEventListener("click", () => {
   }
 });
 
-function submitSurvey() {
+function getSurveyResponse() {
   const anon = document.getElementById("sAnon").checked;
-
-  const response = {
+  return {
     id: Date.now(),
     type: "survey",
     date: new Date().toISOString(),
@@ -172,9 +219,10 @@ function submitSurvey() {
     whatToLearn: document.getElementById("q4WhatToLearn").value.trim(),
     whatToImprove: document.getElementById("q5WhatToImprove").value.trim()
   };
-  saveResponse(response);
+}
 
-  sendResponseByEmail("Ответ на опросник об обучении", [
+function surveyResponseLines(response) {
+  return [
     `Стаж в компании: ${response.tenure || "не указано"}`,
     `Основные задачи: ${response.tasks || "не указано"}`,
     `Уже проходил(а): ${response.priorTraining || "не указано"}`,
@@ -183,10 +231,25 @@ function submitSurvey() {
     `Отдел: ${response.department || "не указан"}`,
     `Имя: ${response.anonymous ? "анонимно" : response.name || "не указано"}`,
     `Дата: ${new Date(response.date).toLocaleString("ru-RU")}`
-  ]);
+  ];
+}
 
+function submitSurveyByEmail() {
+  const response = getSurveyResponse();
+  saveResponse(response);
+  sendResponseByEmail("Ответ на опросник об обучении", surveyResponseLines(response));
   showToast("Открываем почту — нажмите «Отправить» в письме 📧");
 }
+
+document.getElementById("copySurvey").addEventListener("click", async () => {
+  const response = getSurveyResponse();
+  saveResponse(response);
+  await copyResponseText("Ответ на опросник об обучении", surveyResponseLines(response));
+  if (currentStep < steps.length - 1) {
+    currentStep++;
+    showStep(currentStep);
+  }
+});
 
 document.getElementById("restartSurvey").addEventListener("click", () => {
   surveyForm.reset();
