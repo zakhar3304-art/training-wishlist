@@ -1,4 +1,5 @@
 const STORAGE_KEY = "trainingFeedbackResponses";
+const HR_EMAIL = "mahabbbat@icloud.com";
 
 function loadResponses() {
   try {
@@ -12,6 +13,12 @@ function saveResponse(response) {
   const all = loadResponses();
   all.push(response);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+
+function sendResponseByEmail(subject, lines) {
+  const body = lines.filter(Boolean).join("\n");
+  const mailtoUrl = `mailto:${HR_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailtoUrl;
 }
 
 function showToast(message) {
@@ -80,6 +87,13 @@ document.getElementById("submitTrainings").addEventListener("click", () => {
   };
   saveResponse(response);
 
+  sendResponseByEmail("Заявка на тренинг(и)", [
+    `Тренинги: ${response.trainings.join(", ")}`,
+    `Отдел: ${response.department || "не указан"}`,
+    `Имя: ${response.anonymous ? "анонимно" : response.name || "не указано"}`,
+    `Дата: ${new Date(response.date).toLocaleString("ru-RU")}`
+  ]);
+
   selectedTrainings.forEach(id => {
     document.getElementById(`card-${id}`)?.querySelector(".pick-btn")?.classList.remove("picked");
     document.getElementById(`card-${id}`)?.classList.remove("selected");
@@ -91,7 +105,7 @@ document.getElementById("submitTrainings").addEventListener("click", () => {
   document.getElementById("tDept").value = "";
   document.getElementById("tAnon").checked = false;
 
-  showToast("Спасибо! Ваш выбор отправлен 🎉");
+  showToast("Открываем почту — нажмите «Отправить» в письме 📧");
 });
 
 renderTrainings();
@@ -159,7 +173,19 @@ function submitSurvey() {
     whatToImprove: document.getElementById("q5WhatToImprove").value.trim()
   };
   saveResponse(response);
-  showToast("Спасибо! Ответ на опрос получен 🎉");
+
+  sendResponseByEmail("Ответ на опросник об обучении", [
+    `Стаж в компании: ${response.tenure || "не указано"}`,
+    `Основные задачи: ${response.tasks || "не указано"}`,
+    `Уже проходил(а): ${response.priorTraining || "не указано"}`,
+    `Хочет узнать: ${response.whatToLearn || "не указано"}`,
+    `Хочет улучшить: ${response.whatToImprove || "не указано"}`,
+    `Отдел: ${response.department || "не указан"}`,
+    `Имя: ${response.anonymous ? "анонимно" : response.name || "не указано"}`,
+    `Дата: ${new Date(response.date).toLocaleString("ru-RU")}`
+  ]);
+
+  showToast("Открываем почту — нажмите «Отправить» в письме 📧");
 }
 
 document.getElementById("restartSurvey").addEventListener("click", () => {
