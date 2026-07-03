@@ -88,7 +88,18 @@
         <input type="checkbox" id="tAnon"> Отправить анонимно
       </label>
 
-      <div style="margin-top:22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <div class="field-row" style="max-width:260px; margin-top:16px;">
+        <label class="field-label">Через какую почту отправить?</label>
+        <select id="tMailProvider">
+          <option value="default">Почтовый клиент по умолчанию</option>
+          <option value="gmail">Gmail</option>
+          <option value="outlook">Outlook</option>
+          <option value="yandex">Яндекс Почта</option>
+          <option value="mailru">Mail.ru</option>
+        </select>
+      </div>
+
+      <div style="margin-top:10px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
         <button class="btn btn-primary" id="submitTrainings">Отправить выбор ✅</button>
         <button class="btn btn-secondary" id="copyTrainings">📋 Скопировать ответ</button>
         <span id="pickCount" style="color:var(--ink-soft); font-weight:700;">Выбрано тренингов: 0</span>
@@ -189,8 +200,20 @@
           <label class="anon-row">
             <input type="checkbox" id="sAnon"> Отправить анонимно
           </label>
-          <p style="color:var(--ink-soft); font-size:.85rem; margin-top:14px;">После нажатия «Отправить» откроется ваша почта с готовым письмом — останется нажать «Отправить» в ней. Если почта не открывается, нажмите «Скопировать ответ» и вставьте текст вручную.</p>
-          <button type="button" class="btn btn-secondary" id="copySurvey" style="margin-top:12px;">📋 Скопировать ответ</button>
+
+          <div class="field-row" style="max-width:260px; margin-top:16px;">
+            <label class="field-label">Через какую почту отправить?</label>
+            <select id="sMailProvider">
+              <option value="default">Почтовый клиент по умолчанию</option>
+              <option value="gmail">Gmail</option>
+              <option value="outlook">Outlook</option>
+              <option value="yandex">Яндекс Почта</option>
+              <option value="mailru">Mail.ru</option>
+            </select>
+          </div>
+
+          <p style="color:var(--ink-soft); font-size:.85rem; margin-top:4px;">После нажатия «Отправить» откроется письмо в выбранной почте — останется нажать «Отправить» в ней. Если почта не открывается, нажмите «Скопировать ответ» и вставьте текст вручную.</p>
+          <button type="button" class="btn btn-secondary" id="copySurvey" style="margin-top:4px;">📋 Скопировать ответ</button>
         </div>
 
         <!-- Thank you -->

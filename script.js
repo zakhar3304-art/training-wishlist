@@ -15,10 +15,31 @@ function saveResponse(response) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
 }
 
-function sendResponseByEmail(subject, lines) {
+function buildMailUrl(provider, subject, body) {
+  const su = encodeURIComponent(subject);
+  const bo = encodeURIComponent(body);
+  switch (provider) {
+    case "gmail":
+      return `https://mail.google.com/mail/?view=cm&fs=1&to=${HR_EMAIL}&su=${su}&body=${bo}`;
+    case "outlook":
+      return `https://outlook.live.com/mail/0/deeplink/compose?to=${HR_EMAIL}&subject=${su}&body=${bo}`;
+    case "yandex":
+      return `https://mail.yandex.ru/compose?to=${HR_EMAIL}&subject=${su}&body=${bo}`;
+    case "mailru":
+      return `https://e.mail.ru/compose/?mailto=${HR_EMAIL}&subject=${su}&body=${bo}`;
+    default:
+      return `mailto:${HR_EMAIL}?subject=${su}&body=${bo}`;
+  }
+}
+
+function sendResponseByEmail(subject, lines, provider) {
   const body = lines.filter(Boolean).join("\n");
-  const mailtoUrl = `mailto:${HR_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailtoUrl;
+  const url = buildMailUrl(provider || "default", subject, body);
+  if (provider && provider !== "default") {
+    window.open(url, "_blank", "noopener");
+  } else {
+    window.location.href = url;
+  }
 }
 
 async function copyToClipboard(text) {
@@ -139,8 +160,9 @@ document.getElementById("submitTrainings").addEventListener("click", () => {
     return;
   }
   const response = getTrainingsResponse();
+  const provider = document.getElementById("tMailProvider").value;
   saveResponse(response);
-  sendResponseByEmail("Заявка на тренинг(и)", trainingsResponseLines(response));
+  sendResponseByEmail("Заявка на тренинг(и)", trainingsResponseLines(response), provider);
   resetTrainingsForm();
   showToast("Открываем почту — нажмите «Отправить» в письме 📧");
 });
@@ -236,8 +258,9 @@ function surveyResponseLines(response) {
 
 function submitSurveyByEmail() {
   const response = getSurveyResponse();
+  const provider = document.getElementById("sMailProvider").value;
   saveResponse(response);
-  sendResponseByEmail("Ответ на опросник об обучении", surveyResponseLines(response));
+  sendResponseByEmail("Ответ на опросник об обучении", surveyResponseLines(response), provider);
   showToast("Открываем почту — нажмите «Отправить» в письме 📧");
 }
 
