@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учись как хочешь — отдел обучения слушает вас</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner container">
+    <div class="brand"><span class="emoji-badge">🎓</span> Учись как хочешь</div>
+    <nav class="nav-links">
+      <a href="#trainings">Готовые тренинги</a>
+      <a href="#survey">Опросник</a>
+      <a href="#how">Как это работает</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="container hero-inner">
+    <div>
+      <span class="eyebrow">✨ Отдел обучения на связи</span>
+      <h1>Какое обучение <span>прокачает</span> именно тебя?</h1>
+      <p class="lead">Выбери готовый тренинг из списка — или пройди короткий опросник, если пока не знаешь, что нужно. Мы читаем каждый ответ и планируем обучение по вашим реальным запросам.</p>
+      <div class="hero-cta">
+        <a href="#trainings" class="btn btn-primary">📚 Смотреть тренинги</a>
+        <a href="#survey" class="btn btn-secondary">🧭 Не знаю, что выбрать</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="hero-card">
+        <div class="big-emoji">🙌</div>
+        <h3>2 минуты — и ваш голос услышан</h3>
+        <p style="color:var(--ink-soft); font-size:.95rem;">Никаких длинных форм. Выберите тренинг в один клик или ответьте на 5 коротких вопросов.</p>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>8</b><span>тренингов уже готовы</span></div>
+          <div class="hero-stat"><b>5</b><span>вопросов в опроснике</span></div>
+          <div class="hero-stat"><b>100%</b><span>анонимно по желанию</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="trainings">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">Шаг 1 · Если уже знаете, что хотите</span>
+      <h2>Готовые тренинги 📚</h2>
+      <p>Отметьте один или несколько тренингов, на которые хотели бы попасть — это уже поможет нам расставить приоритеты.</p>
+    </div>
+
+    <div class="trainings-grid" id="trainingsGrid"></div>
+
+    <div class="survey-wrap" style="margin-top:36px;">
+      <h3 style="margin-bottom:4px;">Готовы отправить выбор? 🚀</h3>
+      <p style="color:var(--ink-soft); font-size:.95rem;">Контакты — по желанию. Можно отправить совсем анонимно.</p>
+
+      <div class="two-col field-row">
+        <div>
+          <label class="field-label">Отдел</label>
+          <select id="tDept">
+            <option value="">Не указывать</option>
+            <option>Продажи</option>
+            <option>Маркетинг</option>
+            <option>Разработка</option>
+            <option>Продукт</option>
+            <option>HR</option>
+            <option>Финансы</option>
+            <option>Поддержка клиентов</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Имя (необязательно)</label>
+          <input type="text" id="tName" placeholder="Как к вам обращаться?">
+        </div>
+      </div>
+
+      <label class="anon-row">
+        <input type="checkbox" id="tAnon"> Отправить анонимно
+      </label>
+
+      <div style="margin-top:22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <button class="btn btn-primary" id="submitTrainings">Отправить выбор ✅</button>
+        <span id="pickCount" style="color:var(--ink-soft); font-weight:700;">Выбрано тренингов: 0</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="survey">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">Шаг 2 · Если пока не знаете, что выбрать</span>
+      <h2>Небольшой опросник 🧭</h2>
+      <p>4 коротких шага помогут отделу обучения понять, что вам сейчас действительно нужно.</p>
+    </div>
+
+    <div class="survey-wrap">
+      <div class="progress-track">
+        <div class="progress-seg active" data-seg="1"><span></span></div>
+        <div class="progress-seg" data-seg="2"><span></span></div>
+        <div class="progress-seg" data-seg="3"><span></span></div>
+        <div class="progress-seg" data-seg="4"><span></span></div>
+        <div class="progress-seg" data-seg="5"><span></span></div>
+        <div class="progress-seg" data-seg="6"><span></span></div>
+      </div>
+
+      <form id="surveyForm">
+        <!-- Step 1 -->
+        <div class="q-step active" data-step="1">
+          <span class="q-num">Вопрос 1 из 5</span>
+          <h3>Сколько вы работаете в нашей компании? ⏳</h3>
+          <div class="field-row">
+            <textarea id="q1Tenure" rows="2" placeholder="Например: 2 года 3 месяца"></textarea>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="q-step" data-step="2">
+          <span class="q-num">Вопрос 2 из 5</span>
+          <h3>Кратко опишите основные ваши задачи ✍️</h3>
+          <div class="field-row">
+            <textarea id="q2Tasks" rows="4" placeholder="Чем вы занимаетесь на своей должности изо дня в день?"></textarea>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="q-step" data-step="3">
+          <span class="q-num">Вопрос 3 из 5</span>
+          <h3>Какое обучение вы уже проходили ранее? 📖</h3>
+          <div class="field-row">
+            <textarea id="q3PriorTraining" rows="4" placeholder="Курсы, тренинги, вебинары — внутренние или внешние..."></textarea>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="q-step" data-step="4">
+          <span class="q-num">Вопрос 4 из 5</span>
+          <h3>Что для вас важно узнать нового в первую очередь? 💡</h3>
+          <div class="field-row">
+            <textarea id="q4WhatToLearn" rows="4" placeholder="Какие знания или навыки хотелось бы получить прямо сейчас?"></textarea>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="q-step" data-step="5">
+          <span class="q-num">Вопрос 5 из 5</span>
+          <h3>Что в вашей работе вы хотите улучшить в первую очередь? 🚀</h3>
+          <div class="field-row">
+            <textarea id="q5WhatToImprove" rows="4" placeholder="Что мешает работать эффективнее и что стоило бы прокачать?"></textarea>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="q-step" data-step="6">
+          <span class="q-num">И последнее</span>
+          <h3>Немного о вас 🙋</h3>
+          <div class="two-col field-row">
+            <div>
+              <label class="field-label">Отдел</label>
+              <select id="sDept">
+                <option value="">Не указывать</option>
+                <option>Продажи</option>
+                <option>Маркетинг</option>
+                <option>Разработка</option>
+                <option>Продукт</option>
+                <option>HR</option>
+                <option>Финансы</option>
+                <option>Поддержка клиентов</option>
+                <option>Другое</option>
+              </select>
+            </div>
+            <div>
+              <label class="field-label">Имя (необязательно)</label>
+              <input type="text" id="sName" placeholder="Как к вам обращаться?">
+            </div>
+          </div>
+          <label class="anon-row">
+            <input type="checkbox" id="sAnon"> Отправить анонимно
+          </label>
+        </div>
+
+        <!-- Thank you -->
+        <div class="q-step" data-step="thanks">
+          <div class="thankyou">
+            <div class="big-emoji">🎉</div>
+            <h3>Спасибо! Ответ получен</h3>
+            <p style="color:var(--ink-soft);">Мы учтём это при планировании программы обучения. Если захотите — можно ещё выбрать тренинг из списка выше.</p>
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+              <a href="#trainings" class="btn btn-secondary">📚 К списку тренингов</a>
+              <button type="button" class="btn btn-primary" id="restartSurvey">🔁 Пройти ещё раз</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-nav" id="stepNav">
+          <button type="button" class="btn btn-ghost" id="prevBtn" style="visibility:hidden;">← Назад</button>
+          <button type="button" class="btn btn-primary" id="nextBtn">Дальше →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">Прозрачно</span>
+      <h2>Как это работает 🔍</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Вы делитесь запросом</h3>
+        <p style="color:var(--ink-soft);">Выбираете тренинг из списка или проходите опросник — как удобнее.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Мы анализируем ответы</h3>
+        <p style="color:var(--ink-soft);">Отдел обучения собирает все запросы и смотрит на общие темы и пробелы в навыках.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Формируем программу</h3>
+        <p style="color:var(--ink-soft);">На основе реальных запросов планируем тренинги на следующий квартал.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Сделано с ❤️ отделом обучения · Есть идея тренинга? Пишите в опроснике выше</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

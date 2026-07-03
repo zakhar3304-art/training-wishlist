@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Результаты опроса — отдел обучения</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner container">
+    <div class="brand"><span class="emoji-badge">📈</span> Результаты опроса</div>
+    <nav class="nav-links">
+      <a href="index.html">← На главную</a>
+    </nav>
+  </div>
+</div>
+
+<div class="container admin-header">
+  <h1>Что хотят изучать сотрудники 🔍</h1>
+  <p style="color:var(--ink-soft); max-width:640px;">Эта страница собирает все ответы, отправленные с этого устройства (данные хранятся локально в браузере). Используйте её, чтобы понять запросы команды и спланировать программу обучения.</p>
+
+  <div class="admin-actions">
+    <button class="btn btn-secondary" id="exportCsv">⬇️ Экспорт в CSV</button>
+    <button class="btn btn-secondary" id="exportJson">⬇️ Экспорт в JSON</button>
+    <button class="btn btn-ghost" id="clearAll">🗑️ Очистить все данные</button>
+  </div>
+
+  <div class="admin-stats">
+    <div class="stat-card"><b id="statTotal">0</b><span>всего ответов</span></div>
+    <div class="stat-card"><b id="statTrainings">0</b><span>заявок на тренинги</span></div>
+    <div class="stat-card"><b id="statSurveys">0</b><span>пройдено опросников</span></div>
+    <div class="stat-card"><b id="statDepts">0</b><span>отделов участвовало</span></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:24px;">
+    <h3>🏆 Топ тренингов по спросу</h3>
+    <div id="trainingBars"></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:30px;">
+    <h3>🚀 Что сотрудники хотят улучшить в первую очередь</h3>
+    <div id="painPoints"></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:60px;">
+    <h3>📋 Все ответы</h3>
+    <div id="responseList" class="response-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="results.js"></script>
+</body>
+</html>

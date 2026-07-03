@@ -1,0 +1,171 @@
+const STORAGE_KEY = "trainingFeedbackResponses";
+
+function loadResponses() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveResponse(response) {
+  const all = loadResponses();
+  all.push(response);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+/* ===== Trainings grid ===== */
+const selectedTrainings = new Set();
+
+function renderTrainings() {
+  const grid = document.getElementById("trainingsGrid");
+  grid.innerHTML = TRAININGS.map(t => `
+    <div class="training-card" id="card-${t.id}">
+      <div class="training-icon" style="background:${t.color}">${t.icon}</div>
+      <h3>${t.title}</h3>
+      <p>${t.desc}</p>
+      <div class="training-meta">
+        ${t.tags.map((tag, i) => `<span class="tag ${i === 0 ? "tag-teal" : i === 1 ? "tag-yellow" : ""}">${tag}</span>`).join("")}
+      </div>
+      <button class="pick-btn" data-id="${t.id}">Хочу пройти</button>
+    </div>
+  `).join("");
+
+  grid.querySelectorAll(".pick-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const card = document.getElementById(`card-${id}`);
+      if (selectedTrainings.has(id)) {
+        selectedTrainings.delete(id);
+        btn.classList.remove("picked");
+        card.classList.remove("selected");
+        btn.textContent = "Хочу пройти";
+      } else {
+        selectedTrainings.add(id);
+        btn.classList.add("picked");
+        card.classList.add("selected");
+        btn.textContent = "Выбрано ✓";
+      }
+      updatePickCount();
+    });
+  });
+}
+
+function updatePickCount() {
+  document.getElementById("pickCount").textContent = `Выбрано тренингов: ${selectedTrainings.size}`;
+}
+
+document.getElementById("submitTrainings").addEventListener("click", () => {
+  if (selectedTrainings.size === 0) {
+    showToast("Выберите хотя бы один тренинг 🙂");
+    return;
+  }
+  const anon = document.getElementById("tAnon").checked;
+  const response = {
+    id: Date.now(),
+    type: "trainings",
+    date: new Date().toISOString(),
+    anonymous: anon,
+    name: anon ? "" : document.getElementById("tName").value.trim(),
+    department: document.getElementById("tDept").value,
+    trainings: Array.from(selectedTrainings).map(id => TRAININGS.find(t => t.id === id).title)
+  };
+  saveResponse(response);
+
+  selectedTrainings.forEach(id => {
+    document.getElementById(`card-${id}`)?.querySelector(".pick-btn")?.classList.remove("picked");
+    document.getElementById(`card-${id}`)?.classList.remove("selected");
+  });
+  document.querySelectorAll(".pick-btn").forEach(b => b.textContent = "Хочу пройти");
+  selectedTrainings.clear();
+  updatePickCount();
+  document.getElementById("tName").value = "";
+  document.getElementById("tDept").value = "";
+  document.getElementById("tAnon").checked = false;
+
+  showToast("Спасибо! Ваш выбор отправлен 🎉");
+});
+
+renderTrainings();
+
+/* ===== Survey wizard ===== */
+const steps = ["1", "2", "3", "4", "5", "6", "thanks"];
+let currentStep = 0;
+
+const surveyForm = document.getElementById("surveyForm");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function showStep(index) {
+  document.querySelectorAll(".q-step").forEach(el => el.classList.remove("active"));
+  document.querySelector(`.q-step[data-step="${steps[index]}"]`).classList.add("active");
+
+  document.querySelectorAll(".progress-seg").forEach((seg, i) => {
+    seg.classList.remove("active", "done");
+    if (i < index) seg.classList.add("done");
+    else if (i === index) seg.classList.add("active");
+  });
+
+  const nav = document.getElementById("stepNav");
+  if (steps[index] === "thanks") {
+    nav.style.display = "none";
+  } else {
+    nav.style.display = "flex";
+    prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
+    nextBtn.textContent = index === steps.length - 2 ? "Отправить ✅" : "Дальше →";
+  }
+}
+
+nextBtn.addEventListener("click", () => {
+  if (steps[currentStep] === "6") {
+    submitSurvey();
+  }
+
+  if (currentStep < steps.length - 1) {
+    currentStep++;
+    showStep(currentStep);
+  }
+});
+
+prevBtn.addEventListener("click", () => {
+  if (currentStep > 0) {
+    currentStep--;
+    showStep(currentStep);
+  }
+});
+
+function submitSurvey() {
+  const anon = document.getElementById("sAnon").checked;
+
+  const response = {
+    id: Date.now(),
+    type: "survey",
+    date: new Date().toISOString(),
+    anonymous: anon,
+    name: anon ? "" : document.getElementById("sName").value.trim(),
+    department: document.getElementById("sDept").value,
+    tenure: document.getElementById("q1Tenure").value.trim(),
+    tasks: document.getElementById("q2Tasks").value.trim(),
+    priorTraining: document.getElementById("q3PriorTraining").value.trim(),
+    whatToLearn: document.getElementById("q4WhatToLearn").value.trim(),
+    whatToImprove: document.getElementById("q5WhatToImprove").value.trim()
+  };
+  saveResponse(response);
+  showToast("Спасибо! Ответ на опрос получен 🎉");
+}
+
+document.getElementById("restartSurvey").addEventListener("click", () => {
+  surveyForm.reset();
+  currentStep = 0;
+  showStep(currentStep);
+});
+
+showStep(currentStep);
