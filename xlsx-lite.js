@@ -114,7 +114,7 @@ function xlsxBuildSheetXml(rows) {
     }).join("");
     return `<row r="${ri + 1}">${cells}</row>`;
   }).join("");
-  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${rowsXml}</sheetData><cols><col min="1" max="1" width="26" customWidth="1"/><col min="2" max="2" width="50" customWidth="1"/></cols></worksheet>`;
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols><col min="1" max="1" width="26" customWidth="1"/><col min="2" max="2" width="50" customWidth="1"/></cols><sheetData>${rowsXml}</sheetData></worksheet>`;
 }
 
 function downloadXlsx(filename, sheetName, rows) {
