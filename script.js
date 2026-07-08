@@ -20,6 +20,14 @@ function dateSlug(iso) {
   return iso.slice(0, 16).replace(/[:T]/g, "-");
 }
 
+function downloadXlsx(filename, sheetName, rows) {
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  ws["!cols"] = [{ wch: 26 }, { wch: 50 }];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName.slice(0, 31));
+  XLSX.writeFile(wb, filename);
+}
+
 function downloadResponseExcel(response) {
   const subject = response.type === "trainings" ? "Заявка на тренинг(и)" : "Ответ на опросник об обучении";
   const pairs = response.type === "trainings" ? trainingsResponsePairs(response) : surveyResponsePairs(response);
