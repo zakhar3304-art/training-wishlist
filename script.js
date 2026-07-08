@@ -222,6 +222,8 @@ function getSurveyResponse() {
     date: new Date().toISOString(),
     anonymous: anon,
     name: anon ? "" : document.getElementById("sName").value.trim(),
+    surname: anon ? "" : document.getElementById("sSurname").value.trim(),
+    position: document.getElementById("sPosition").value.trim(),
     department: document.getElementById("sDept").value,
     tenure: document.getElementById("q1Tenure").value.trim(),
     tasks: document.getElementById("q2Tasks").value.trim(),
@@ -238,8 +240,10 @@ function surveyResponsePairs(response) {
     ["Уже проходил(а)", response.priorTraining || "не указано"],
     ["Хочет узнать", response.whatToLearn || "не указано"],
     ["Хочет улучшить", response.whatToImprove || "не указано"],
+    ["Должность", response.position || "не указана"],
     ["Отдел", response.department || "не указан"],
     ["Имя", response.anonymous ? "анонимно" : response.name || "не указано"],
+    ["Фамилия", response.anonymous ? "анонимно" : response.surname || "не указана"],
     ["Дата", new Date(response.date).toLocaleString("ru-RU")]
   ];
 }

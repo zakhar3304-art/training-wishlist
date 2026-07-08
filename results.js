@@ -59,7 +59,7 @@ function render() {
     ? `<div class="empty-note">Пока нет данных</div>`
     : improvements.map(r => `
         <div class="response-item">
-          <div class="r-top"><span>${r.anonymous ? "Аноним" : escapeHtml(r.name) || "Без имени"} · ${escapeHtml(r.department) || "Отдел не указан"}</span><span>${new Date(r.date).toLocaleDateString("ru-RU")}</span></div>
+          <div class="r-top"><span>${r.anonymous ? "Аноним" : escapeHtml([r.name, r.surname].filter(Boolean).join(" ")) || "Без имени"} · ${escapeHtml(r.position) || "Должность не указана"} · ${escapeHtml(r.department) || "Отдел не указан"}</span><span>${new Date(r.date).toLocaleDateString("ru-RU")}</span></div>
           <p style="margin:0;">${escapeHtml(r.whatToImprove)}</p>
         </div>
       `).join("");
@@ -71,7 +71,7 @@ function render() {
     : sorted.map(r => `
         <div class="response-item">
           <div class="r-top">
-            <span><span class="r-type ${r.type}">${r.type === "trainings" ? "Тренинги" : "Опросник"}</span> &nbsp;${r.anonymous ? "Аноним" : escapeHtml(r.name) || "Без имени"} · ${escapeHtml(r.department) || "Отдел не указан"}</span>
+            <span><span class="r-type ${r.type}">${r.type === "trainings" ? "Тренинги" : "Опросник"}</span> &nbsp;${r.anonymous ? "Аноним" : escapeHtml([r.name, r.surname].filter(Boolean).join(" ")) || "Без имени"}${r.position ? " · " + escapeHtml(r.position) : ""} · ${escapeHtml(r.department) || "Отдел не указан"}</span>
             <span>${new Date(r.date).toLocaleString("ru-RU")}</span>
           </div>
           ${r.type === "trainings" ? `
@@ -97,11 +97,13 @@ function toCsvValue(v) {
 document.getElementById("exportCsv").addEventListener("click", () => {
   const responses = loadResponses();
   if (responses.length === 0) { showToast("Нет данных для экспорта"); return; }
-  const header = ["Дата", "Тип", "Имя", "Отдел", "Анонимно", "Тренинги", "Стаж в компании", "Основные задачи", "Уже проходил(а)", "Хочет узнать", "Хочет улучшить"];
+  const header = ["Дата", "Тип", "Имя", "Фамилия", "Должность", "Отдел", "Анонимно", "Тренинги", "Стаж в компании", "Основные задачи", "Уже проходил(а)", "Хочет узнать", "Хочет улучшить"];
   const rows = responses.map(r => [
     new Date(r.date).toLocaleString("ru-RU"),
     r.type === "trainings" ? "Тренинги" : "Опросник",
     r.name || "",
+    r.surname || "",
+    r.position || "",
     r.department || "",
     r.anonymous ? "Да" : "Нет",
     (r.trainings || []).join("; "),
