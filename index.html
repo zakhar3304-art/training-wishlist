@@ -61,7 +61,7 @@
 
     <div class="survey-wrap" style="margin-top:36px;">
       <h3 style="margin-bottom:4px;">Готовы отправить выбор? 🚀</h3>
-      <p style="color:var(--ink-soft); font-size:.95rem;">Контакты — по желанию. Можно отправить совсем анонимно. После отправки откроется ваша почта с готовым письмом — останется нажать «Отправить».</p>
+      <p style="color:var(--ink-soft); font-size:.95rem;">Контакты — по желанию. Можно отправить совсем анонимно. После отправки на устройство автоматически скачается файл Excel с вашим ответом, а также откроется почта с готовым письмом — останется нажать «Отправить».</p>
 
       <div class="two-col field-row">
         <div>
@@ -212,7 +212,7 @@
             </select>
           </div>
 
-          <p style="color:var(--ink-soft); font-size:.85rem; margin-top:4px;">После нажатия «Отправить» откроется письмо в выбранной почте — останется нажать «Отправить» в ней. Если почта не открывается, нажмите «Скопировать ответ» и вставьте текст вручную.</p>
+          <p style="color:var(--ink-soft); font-size:.85rem; margin-top:4px;">После нажатия «Отправить» на устройство автоматически скачается файл Excel с вашим ответом, а также откроется письмо в выбранной почте — останется нажать «Отправить» в ней. Если почта не открывается, нажмите «Скопировать ответ» и вставьте текст вручную.</p>
           <button type="button" class="btn btn-secondary" id="copySurvey" style="margin-top:4px;">📋 Скопировать ответ</button>
         </div>
 
@@ -273,6 +273,7 @@
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
+<script src="xlsx-lite.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

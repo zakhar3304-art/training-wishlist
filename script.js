@@ -13,6 +13,19 @@ function saveResponse(response) {
   const all = loadResponses();
   all.push(response);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+  downloadResponseExcel(response);
+}
+
+function dateSlug(iso) {
+  return iso.slice(0, 16).replace(/[:T]/g, "-");
+}
+
+function downloadResponseExcel(response) {
+  const subject = response.type === "trainings" ? "Заявка на тренинг(и)" : "Ответ на опросник об обучении";
+  const pairs = response.type === "trainings" ? trainingsResponsePairs(response) : surveyResponsePairs(response);
+  const rows = [["Поле", "Значение"], ["Тема", subject], ...pairs];
+  const slug = subject.replace(/[^\wа-яёА-ЯЁ]+/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
+  downloadXlsx(`${slug}_${dateSlug(response.date)}.xlsx`, "Ответ", rows);
 }
 
 function buildMailUrl(provider, subject, body) {
@@ -67,7 +80,7 @@ async function copyToClipboard(text) {
 async function copyResponseText(subject, lines) {
   const text = `Тема: ${subject}\n\n${lines.filter(Boolean).join("\n")}`;
   const ok = await copyToClipboard(text);
-  showToast(ok ? "Скопировано! Вставьте текст в письмо или чат 📋" : "Не удалось скопировать 😕");
+  showToast(ok ? "Файл Excel скачан, текст скопирован 📊📋" : "Файл Excel скачан. Не удалось скопировать текст 😕");
 }
 
 function showToast(message) {
@@ -132,13 +145,17 @@ function getTrainingsResponse() {
   };
 }
 
-function trainingsResponseLines(response) {
+function trainingsResponsePairs(response) {
   return [
-    `Тренинги: ${response.trainings.join(", ")}`,
-    `Отдел: ${response.department || "не указан"}`,
-    `Имя: ${response.anonymous ? "анонимно" : response.name || "не указано"}`,
-    `Дата: ${new Date(response.date).toLocaleString("ru-RU")}`
+    ["Тренинги", response.trainings.join(", ")],
+    ["Отдел", response.department || "не указан"],
+    ["Имя", response.anonymous ? "анонимно" : response.name || "не указано"],
+    ["Дата", new Date(response.date).toLocaleString("ru-RU")]
   ];
+}
+
+function trainingsResponseLines(response) {
+  return trainingsResponsePairs(response).map(([label, value]) => `${label}: ${value}`);
 }
 
 function resetTrainingsForm() {
@@ -164,7 +181,7 @@ document.getElementById("submitTrainings").addEventListener("click", () => {
   saveResponse(response);
   sendResponseByEmail("Заявка на тренинг(и)", trainingsResponseLines(response), provider);
   resetTrainingsForm();
-  showToast("Открываем почту — нажмите «Отправить» в письме 📧");
+  showToast("Файл Excel скачан, открываем почту 📊📧");
 });
 
 document.getElementById("copyTrainings").addEventListener("click", async () => {
@@ -243,17 +260,21 @@ function getSurveyResponse() {
   };
 }
 
-function surveyResponseLines(response) {
+function surveyResponsePairs(response) {
   return [
-    `Стаж в компании: ${response.tenure || "не указано"}`,
-    `Основные задачи: ${response.tasks || "не указано"}`,
-    `Уже проходил(а): ${response.priorTraining || "не указано"}`,
-    `Хочет узнать: ${response.whatToLearn || "не указано"}`,
-    `Хочет улучшить: ${response.whatToImprove || "не указано"}`,
-    `Отдел: ${response.department || "не указан"}`,
-    `Имя: ${response.anonymous ? "анонимно" : response.name || "не указано"}`,
-    `Дата: ${new Date(response.date).toLocaleString("ru-RU")}`
+    ["Стаж в компании", response.tenure || "не указано"],
+    ["Основные задачи", response.tasks || "не указано"],
+    ["Уже проходил(а)", response.priorTraining || "не указано"],
+    ["Хочет узнать", response.whatToLearn || "не указано"],
+    ["Хочет улучшить", response.whatToImprove || "не указано"],
+    ["Отдел", response.department || "не указан"],
+    ["Имя", response.anonymous ? "анонимно" : response.name || "не указано"],
+    ["Дата", new Date(response.date).toLocaleString("ru-RU")]
   ];
+}
+
+function surveyResponseLines(response) {
+  return surveyResponsePairs(response).map(([label, value]) => `${label}: ${value}`);
 }
 
 function submitSurveyByEmail() {
@@ -261,7 +282,7 @@ function submitSurveyByEmail() {
   const provider = document.getElementById("sMailProvider").value;
   saveResponse(response);
   sendResponseByEmail("Ответ на опросник об обучении", surveyResponseLines(response), provider);
-  showToast("Открываем почту — нажмите «Отправить» в письме 📧");
+  showToast("Файл Excel скачан, открываем почту 📊📧");
 }
 
 document.getElementById("copySurvey").addEventListener("click", async () => {
