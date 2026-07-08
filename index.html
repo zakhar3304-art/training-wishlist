@@ -61,7 +61,7 @@
 
     <div class="survey-wrap" style="margin-top:36px;">
       <h3 style="margin-bottom:4px;">Готовы отправить выбор? 🚀</h3>
-      <p style="color:var(--ink-soft); font-size:.95rem;">Контакты — по желанию. Можно отправить совсем анонимно. После отправки на устройство автоматически скачается файл Excel с вашим ответом, а также откроется почта с готовым письмом — останется нажать «Отправить».</p>
+      <p style="color:var(--ink-soft); font-size:.95rem;">Контакты — по желанию. Можно отправить совсем анонимно.</p>
 
       <div class="two-col field-row">
         <div>
@@ -88,23 +88,11 @@
         <input type="checkbox" id="tAnon"> Отправить анонимно
       </label>
 
-      <div class="field-row" style="max-width:260px; margin-top:16px;">
-        <label class="field-label">Через какую почту отправить?</label>
-        <select id="tMailProvider">
-          <option value="default">Почтовый клиент по умолчанию</option>
-          <option value="gmail">Gmail</option>
-          <option value="outlook">Outlook</option>
-          <option value="yandex">Яндекс Почта</option>
-          <option value="mailru">Mail.ru</option>
-        </select>
-      </div>
-
-      <div style="margin-top:10px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <div style="margin-top:16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
         <button class="btn btn-primary" id="submitTrainings">Отправить выбор ✅</button>
         <button class="btn btn-secondary" id="copyTrainings">📋 Скопировать ответ</button>
         <span id="pickCount" style="color:var(--ink-soft); font-weight:700;">Выбрано тренингов: 0</span>
       </div>
-      <p style="color:var(--ink-soft); font-size:.8rem; margin-top:10px;">Если почта не открывается — нажмите «Скопировать ответ» и вставьте текст в письмо или чат вручную.</p>
     </div>
   </div>
 </section>
@@ -201,19 +189,7 @@
             <input type="checkbox" id="sAnon"> Отправить анонимно
           </label>
 
-          <div class="field-row" style="max-width:260px; margin-top:16px;">
-            <label class="field-label">Через какую почту отправить?</label>
-            <select id="sMailProvider">
-              <option value="default">Почтовый клиент по умолчанию</option>
-              <option value="gmail">Gmail</option>
-              <option value="outlook">Outlook</option>
-              <option value="yandex">Яндекс Почта</option>
-              <option value="mailru">Mail.ru</option>
-            </select>
-          </div>
-
-          <p style="color:var(--ink-soft); font-size:.85rem; margin-top:4px;">После нажатия «Отправить» на устройство автоматически скачается файл Excel с вашим ответом, а также откроется письмо в выбранной почте — останется нажать «Отправить» в ней. Если почта не открывается, нажмите «Скопировать ответ» и вставьте текст вручную.</p>
-          <button type="button" class="btn btn-secondary" id="copySurvey" style="margin-top:4px;">📋 Скопировать ответ</button>
+          <button type="button" class="btn btn-secondary" id="copySurvey" style="margin-top:16px;">📋 Скопировать ответ</button>
         </div>
 
         <!-- Thank you -->

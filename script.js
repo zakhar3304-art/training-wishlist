@@ -1,5 +1,5 @@
 const STORAGE_KEY = "trainingFeedbackResponses";
-const HR_EMAIL = "mahabbbat@icloud.com";
+const EXCEL_READY_MESSAGE = "Сейчас тебе автоматически загрузится файл excel, отправь его любым удобным для тебя способом бизнес-тренеру";
 
 function loadResponses() {
   try {
@@ -26,33 +26,6 @@ function downloadResponseExcel(response) {
   const rows = [["Поле", "Значение"], ["Тема", subject], ...pairs];
   const slug = subject.replace(/[^\wа-яёА-ЯЁ]+/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
   downloadXlsx(`${slug}_${dateSlug(response.date)}.xlsx`, "Ответ", rows);
-}
-
-function buildMailUrl(provider, subject, body) {
-  const su = encodeURIComponent(subject);
-  const bo = encodeURIComponent(body);
-  switch (provider) {
-    case "gmail":
-      return `https://mail.google.com/mail/?view=cm&fs=1&to=${HR_EMAIL}&su=${su}&body=${bo}`;
-    case "outlook":
-      return `https://outlook.live.com/mail/0/deeplink/compose?to=${HR_EMAIL}&subject=${su}&body=${bo}`;
-    case "yandex":
-      return `https://mail.yandex.ru/compose?to=${HR_EMAIL}&subject=${su}&body=${bo}`;
-    case "mailru":
-      return `https://e.mail.ru/compose/?mailto=${HR_EMAIL}&subject=${su}&body=${bo}`;
-    default:
-      return `mailto:${HR_EMAIL}?subject=${su}&body=${bo}`;
-  }
-}
-
-function sendResponseByEmail(subject, lines, provider) {
-  const body = lines.filter(Boolean).join("\n");
-  const url = buildMailUrl(provider || "default", subject, body);
-  if (provider && provider !== "default") {
-    window.open(url, "_blank", "noopener");
-  } else {
-    window.location.href = url;
-  }
 }
 
 async function copyToClipboard(text) {
@@ -83,12 +56,12 @@ async function copyResponseText(subject, lines) {
   showToast(ok ? "Файл Excel скачан, текст скопирован 📊📋" : "Файл Excel скачан. Не удалось скопировать текст 😕");
 }
 
-function showToast(message) {
+function showToast(message, duration) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
   toast.classList.add("show");
   clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), duration || 2600);
 }
 
 /* ===== Trainings grid ===== */
@@ -177,11 +150,9 @@ document.getElementById("submitTrainings").addEventListener("click", () => {
     return;
   }
   const response = getTrainingsResponse();
-  const provider = document.getElementById("tMailProvider").value;
   saveResponse(response);
-  sendResponseByEmail("Заявка на тренинг(и)", trainingsResponseLines(response), provider);
   resetTrainingsForm();
-  showToast("Файл Excel скачан, открываем почту 📊📧");
+  showToast(EXCEL_READY_MESSAGE, 5000);
 });
 
 document.getElementById("copyTrainings").addEventListener("click", async () => {
@@ -227,7 +198,7 @@ function showStep(index) {
 
 nextBtn.addEventListener("click", () => {
   if (steps[currentStep] === "6") {
-    submitSurveyByEmail();
+    submitSurvey();
   }
 
   if (currentStep < steps.length - 1) {
@@ -277,12 +248,10 @@ function surveyResponseLines(response) {
   return surveyResponsePairs(response).map(([label, value]) => `${label}: ${value}`);
 }
 
-function submitSurveyByEmail() {
+function submitSurvey() {
   const response = getSurveyResponse();
-  const provider = document.getElementById("sMailProvider").value;
   saveResponse(response);
-  sendResponseByEmail("Ответ на опросник об обучении", surveyResponseLines(response), provider);
-  showToast("Файл Excel скачан, открываем почту 📊📧");
+  showToast(EXCEL_READY_MESSAGE, 5000);
 }
 
 document.getElementById("copySurvey").addEventListener("click", async () => {

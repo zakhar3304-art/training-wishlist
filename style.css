@@ -589,8 +589,8 @@ footer a { color: var(--teal-dark); font-weight: 700; text-decoration: none; }
   transform: translateX(-50%) translateY(20px);
   background: var(--ink);
   color: #fff;
-  padding: 14px 22px;
-  border-radius: 999px;
+  padding: 16px 24px;
+  border-radius: 20px;
   font-weight: 700;
   box-shadow: 0 10px 24px rgba(0,0,0,.2);
   opacity: 0;
@@ -600,6 +600,9 @@ footer a { color: var(--teal-dark); font-weight: 700; text-decoration: none; }
   display: flex;
   align-items: center;
   gap: 8px;
+  max-width: min(90vw, 440px);
+  text-align: center;
+  line-height: 1.4;
 }
 
 .toast.show {
