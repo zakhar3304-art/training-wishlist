@@ -94,11 +94,6 @@ img, svg { display: block; max-width: 100%; }
   width: auto;
 }
 
-.brand-logo-lg {
-  height: 72px;
-  width: auto;
-}
-
 .brand-logo-huge {
   height: 144px;
   width: auto;
@@ -742,7 +737,6 @@ footer a { color: var(--teal-dark); font-weight: 700; text-decoration: none; }
   .survey-wrap { padding: 26px 18px; }
   .section { padding: 50px 0; }
   .brand span { display: none; }
-  .brand-logo-lg { height: 44px; }
   .brand-logo-huge { height: 88px; }
 }
 
