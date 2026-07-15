@@ -94,6 +94,10 @@ img, svg { display: block; max-width: 100%; }
   width: auto;
 }
 
+.brand-logo-lg {
+  height: 58px;
+}
+
 .nav-links {
   display: flex;
   gap: 22px;
