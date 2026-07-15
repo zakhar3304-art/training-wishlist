@@ -89,6 +89,11 @@ img, svg { display: block; max-width: 100%; }
   animation: float 3.5s ease-in-out infinite;
 }
 
+.brand-logo {
+  height: 38px;
+  width: auto;
+}
+
 .nav-links {
   display: flex;
   gap: 22px;
