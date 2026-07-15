@@ -99,6 +99,11 @@ img, svg { display: block; max-width: 100%; }
   width: auto;
 }
 
+.brand-logo-akademia {
+  height: 48px;
+  width: auto;
+}
+
 .nav-links {
   display: flex;
   gap: 22px;
@@ -738,6 +743,7 @@ footer a { color: var(--teal-dark); font-weight: 700; text-decoration: none; }
   .section { padding: 50px 0; }
   .brand span { display: none; }
   .brand-logo-huge { height: 88px; }
+  .brand-logo-akademia { height: 29px; }
 }
 
 /* ===== Admin dashboard ===== */
