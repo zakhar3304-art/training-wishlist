@@ -176,6 +176,48 @@ document.getElementById("copyTrainings").addEventListener("click", async () => {
 
 renderTrainings();
 
+/* ===== Mandatory courses by position ===== */
+function renderPositions() {
+  const grid = document.getElementById("positionsGrid");
+  grid.innerHTML = POSITIONS.map(p => `
+    <button type="button" class="position-card" data-id="${p.id}">
+      <div class="training-icon" style="background:${p.color}">${p.icon}</div>
+      <h3>${p.title}</h3>
+      <p>${p.courses.length ? `${p.courses.length} курс(ов)` : "Список уточняется"}</p>
+    </button>
+  `).join("");
+
+  grid.querySelectorAll(".position-card").forEach(card => {
+    card.addEventListener("click", () => showPositionDetail(card.dataset.id));
+  });
+}
+
+function showPositionDetail(id) {
+  const position = POSITIONS.find(p => p.id === id);
+  if (!position) return;
+
+  document.getElementById("positionsGrid").style.display = "none";
+  const detail = document.getElementById("positionDetail");
+  detail.style.display = "block";
+
+  const icon = document.getElementById("positionDetailIcon");
+  icon.style.background = position.color;
+  icon.textContent = position.icon;
+  document.getElementById("positionDetailTitle").textContent = position.title;
+
+  const list = document.getElementById("positionCourseList");
+  list.innerHTML = position.courses.length
+    ? position.courses.map(c => `<li>${c}</li>`).join("")
+    : `<li class="empty-note">Список курсов пока уточняется — загляните позже 🙂</li>`;
+}
+
+document.getElementById("positionBackBtn").addEventListener("click", () => {
+  document.getElementById("positionDetail").style.display = "none";
+  document.getElementById("positionsGrid").style.display = "grid";
+});
+
+renderPositions();
+
 /* ===== Survey wizard ===== */
 const steps = ["1", "2", "3", "4", "5", "6", "thanks"];
 let currentStep = 0;

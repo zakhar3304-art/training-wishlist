@@ -15,6 +15,7 @@
     <div class="brand"><span class="emoji-badge">🎓</span> Учись как хочешь</div>
     <nav class="nav-links">
       <a href="#trainings">Готовые тренинги</a>
+      <a href="#mandatory">Обязательные курсы</a>
       <a href="#survey">Опросник</a>
       <a href="#how">Как это работает</a>
     </nav>
@@ -93,6 +94,27 @@
         <button class="btn btn-secondary" id="copyTrainings">📋 Скопировать ответ</button>
         <span id="pickCount" style="color:var(--ink-soft); font-weight:700;">Выбрано тренингов: 0</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="mandatory">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">Справочник</span>
+      <h2>Обязательные курсы по должностям 🎯</h2>
+      <p>Выберите свою должность, чтобы увидеть список курсов, которые нужно пройти.</p>
+    </div>
+
+    <div class="positions-grid" id="positionsGrid"></div>
+
+    <div class="position-detail" id="positionDetail" style="display:none;">
+      <button type="button" class="btn btn-ghost" id="positionBackBtn">← Ко всем должностям</button>
+      <div class="position-detail-head">
+        <div class="training-icon" id="positionDetailIcon"></div>
+        <h3 id="positionDetailTitle"></h3>
+      </div>
+      <ul class="course-list" id="positionCourseList"></ul>
     </div>
   </div>
 </section>

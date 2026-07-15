@@ -65,3 +65,13 @@ const TRAININGS = [
     tags: ["Очно", "8 часов"]
   }
 ];
+
+// Обязательные курсы по должностям. Списки курсов заполняются отдельно.
+const POSITIONS = [
+  { id: "operator", icon: "🎧", color: "#FFE9E5", title: "Оператор", courses: [] },
+  { id: "lead-specialist", icon: "🚀", color: "#FFF3D6", title: "Ведущий специалист", courses: [] },
+  { id: "back", icon: "🗂️", color: "#E4F8F6", title: "Бэк", courses: [] },
+  { id: "chief-specialist", icon: "🏆", color: "#F0EEFB", title: "Главный специалист", courses: [] },
+  { id: "supervisor", icon: "🧭", color: "#FFE9E5", title: "Супервайзер", courses: [] },
+  { id: "mentor", icon: "🌱", color: "#FFF3D6", title: "Наставник", courses: [] }
+];
